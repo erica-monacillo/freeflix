@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09090b">
+<title>FreeFlix — Free Movies, No Ads</title>
+<style>
+:root{--bg:#09090b;--panel:#151519;--panel2:#202026;--text:#f6f6f7;--muted:#a6a6b0;--red:#e50914;--line:#303038}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:inherit}.topbar{height:68px;display:flex;align-items:center;gap:28px;padding:0 clamp(18px,5vw,64px);position:sticky;top:0;background:rgba(9,9,11,.94);backdrop-filter:blur(12px);z-index:5;border-bottom:1px solid #ffffff0d}
+.brand{font-weight:900;font-size:1.45rem;letter-spacing:-.07em;color:var(--red);white-space:nowrap}.brand span{color:white}
+nav{display:flex;gap:18px}nav a{text-decoration:none;color:#ddd;font-size:.92rem}nav a:hover{color:white}
+.search{margin-left:auto;width:min(310px,42vw);display:flex;align-items:center;background:#18181d;border:1px solid #34343c;border-radius:8px;padding:0 12px}.search input{background:transparent;color:white;border:0;outline:0;padding:10px 4px;width:100%;font-size:.92rem}
+.hero{min-height:430px;padding:clamp(38px,7vw,92px) clamp(18px,7vw,92px);display:flex;align-items:end;background:linear-gradient(90deg,#09090b 0%,#09090be8 35%,#09090b40 100%),linear-gradient(0deg,#09090b 0%,transparent 55%),url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=80') center/cover}
+.hero-copy{max-width:650px}.eyebrow{color:#ff6970;font-weight:800;text-transform:uppercase;letter-spacing:.16em;font-size:.76rem}.hero h1{font-size:clamp(2.5rem,6vw,5rem);line-height:.98;letter-spacing:-.06em;margin:12px 0 16px}.hero p{color:#d4d4dc;max-width:550px;line-height:1.65}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btn{border:0;border-radius:7px;padding:12px 18px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}.btn-primary{background:white;color:#111}.btn-secondary{background:#34343bbf;color:white;border:1px solid #ffffff20}.btn:hover{filter:brightness(.9)}
+main{padding:12px clamp(18px,5vw,64px) 64px}.notice{border:1px solid #5b4930;background:#211b12;color:#e8d5b6;padding:13px 15px;border-radius:8px;font-size:.86rem;line-height:1.5;margin:12px 0 28px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:26px 0 14px}.section-head h2{margin:0;font-size:1.25rem;letter-spacing:-.03em}.section-head small{color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.chip{background:#19191f;border:1px solid #33333c;color:#ddd;border-radius:999px;padding:8px 13px;cursor:pointer}.chip.active,.chip:hover{background:#fff;color:#111;border-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}.movie{min-width:0;cursor:pointer}.poster{aspect-ratio:2/3;border-radius:9px;overflow:hidden;position:relative;background:linear-gradient(135deg,#2b2b35,#111);border:1px solid #ffffff12;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;transition:transform .2s}.movie:hover .poster{transform:translateY(-4px)}.poster::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#000b)}.poster .poster-title{font-family:Georgia,serif;font-weight:bold;font-size:clamp(1.1rem,2vw,1.8rem);line-height:1.05;text-shadow:0 2px 8px #000;z-index:1}.poster .year{position:absolute;top:10px;left:10px;font-size:.7rem;background:#0009;padding:5px 7px;border-radius:4px;z-index:2}.movie h3{font-size:.94rem;margin:10px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{color:var(--muted);font-size:.8rem}.movie-actions{display:flex;gap:8px;margin-top:10px}.tiny{font-size:.78rem;padding:7px 9px;border-radius:6px;background:#24242b;color:white;text-decoration:none;border:1px solid #383840}.tiny:hover{background:#393941}
+.empty{padding:40px;text-align:center;color:var(--muted);grid-column:1/-1}.footer{border-top:1px solid var(--line);padding:28px clamp(18px,5vw,64px);color:var(--muted);font-size:.82rem;line-height:1.6}.footer a{color:#ddd}
+dialog{width:min(900px,94vw);max-height:92vh;background:#111115;color:white;border:1px solid #45454d;border-radius:12px;padding:0;overflow:auto}dialog::backdrop{background:#000c;backdrop-filter:blur(5px)}.modal-head{display:flex;justify-content:space-between;gap:15px;padding:18px 20px;align-items:center}.modal-head h2{margin:0;font-size:1.2rem}.close{border:0;background:#292930;color:white;border-radius:7px;padding:8px 12px;cursor:pointer}.player{aspect-ratio:16/9;background:#000}.player iframe{width:100%;height:100%;border:0}.modal-info{padding:18px 20px 24px;color:#c6c6ce;line-height:1.6}.modal-info strong{color:white}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:720px){nav{display:none}.hero{min-height:390px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.search{width:min(240px,50vw)}.section-head{align-items:start;flex-direction:column}.hero p{font-size:.94rem}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="FreeFlix home">FREE<span>FLIX</span></a>
+  <nav><a href="#movies">Movies</a><a href="#about">About</a></nav>
+  <label class="search" aria-label="Search movies">⌕ <input id="search" type="search" placeholder="Search movies..." autocomplete="off"></label>
+</header>
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">A little cinema, for everyone</div>
+    <h1>Great stories.<br>Zero ads.</h1>
+    <p>Discover classic films you can watch for free. No account, no subscription, and no ads inserted by this website.</p>
+    <div class="actions"><a class="btn btn-primary" href="#movies">▶ Explore movies</a><a class="btn btn-secondary" href="#about">ⓘ About this library</a></div>
+  </div>
+</section>
+<main id="movies">
+  <div class="notice"><strong>Rights note:</strong> This is a starter catalog. A film being available online does not automatically mean it is public domain everywhere. Check each source's rights and license before sharing or embedding it publicly. External sites may have their own interface or ads.</div>
+  <div class="section-head"><h2>Browse the collection</h2><small id="count"></small></div>
+  <div class="filters" id="filters">
+    <button class="chip active" data-genre="All">All films</button>
+    <button class="chip" data-genre="Horror">Horror</button>
+    <button class="chip" data-genre="Comedy">Comedy</button>
+    <button class="chip" data-genre="Drama">Drama</button>
+    <button class="chip" data-genre="Adventure">Adventure</button>
+    <button class="chip" data-genre="Animation">Animation</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+<section id="about" class="footer">
+  <strong style="color:#fff">About FreeFlix</strong><br>
+  An independent, non-commercial starter project for discovering films that may be free to watch. FreeFlix is not affiliated with Netflix or the Internet Archive. Film availability, copyright status, and streaming permissions can vary by country and by version of a film. Source links are provided so viewers can review the original listing.
+  <br><br>Made for movie lovers. No ad network or tracking code is included in this starter site.
+</section>
+<dialog id="playerDialog">
+  <div class="modal-head"><h2 id="modalTitle">Watch film</h2><button class="close" id="closeDialog">Close ✕</button></div>
+  <div class="player" id="player"></div>
+  <div class="modal-info" id="modalInfo"></div>
+</dialog>
+<script>
+const movies = [
+ {title:"Night of the Living Dead",year:1968,genre:"Horror",desc:"A landmark independent horror film in which strangers barricade themselves inside a farmhouse.",source:"https://archive.org/details/night_of_the_living_dead",embed:"https://archive.org/embed/night_of_the_living_dead",colors:["#182a2a","#101112"],rights:"Verify the film version and rights for your country."},
+ {title:"His Girl Friday",year:1940,genre:"Comedy",desc:"A fast-talking newsroom comedy about an editor, his star reporter, and a deadline.",source:"https://archive.org/details/his_girl_friday",embed:"https://archive.org/embed/his_girl_friday",colors:["#422c26","#111018"],rights:"Verify the film version and rights for your country."},
+ {title:"The General",year:1926,genre:"Comedy",desc:"Buster Keaton stars in a silent-era comedy built around a locomotive chase.",source:"https://archive.org/details/TheGeneral1926",embed:"https://archive.org/embed/TheGeneral1926",colors:["#323d48","#101015"],rights:"Verify the film version and rights for your country."},
+ {title:"The Cabinet of Dr. Caligari",year:1920,genre:"Horror",desc:"An expressionist silent horror classic with striking sets and shadows.",source:"https://archive.org/search?query=The%20Cabinet%20of%20Dr.%20Caligari%201920",embed:null,colors:["#403044","#0c0c12"],rights:"Choose a source whose specific copy is authorized for your use."},
+ {title:"A Trip to the Moon",year:1902,genre:"Adventure",desc:"Georges Méliès' imaginative early science-fiction fantasy short.",source:"https://commons.wikimedia.org/wiki/Category:A_Trip_to_the_Moon_(film)",embed:null,colors:["#344d69","#0d1320"],rights:"Check the license of the specific file you use."},
+ {title:"The Kid",year:1921,genre:"Comedy",desc:"Charlie Chaplin's silent comedy-drama about a tramp and a child he raises.",source:"https://archive.org/search?query=The%20Kid%201921%20Chaplin",embed:null,colors:["#4c3b31","#121014"],rights:"Verify the film version and rights for your country."},
+ {title:"The Phantom of the Opera",year:1925,genre:"Horror",desc:"A silent adaptation of the classic gothic tale set in the Paris Opera House.",source:"https://archive.org/search?query=Phantom%20of%20the%20Opera%201925",embed:null,colors:["#2e3048","#100f18"],rights:"Verify the film version and rights for your country."},
+ {title:"The Lost World",year:1925,genre:"Adventure",desc:"An early dinosaur adventure based on Arthur Conan Doyle's novel.",source:"https://archive.org/search?query=The%20Lost%20World%201925",embed:null,colors:["#4c4931","#10130e"],rights:"Verify the film version and rights for your country."},
+ {title:"The Immigrant",year:1917,genre:"Comedy",desc:"Charlie Chaplin's short comedy follows a migrant's difficult journey and new life.",source:"https://commons.wikimedia.org/wiki/Category:The_Immigrant_(1917_film)",embed:null,colors:["#4a342d","#141012"],rights:"Check the license of the specific file you use."},
+ {title:"The Adventures of Prince Achmed",year:1926,genre:"Animation",desc:"A pioneering silhouette-animated fantasy feature by Lotte Reiniger.",source:"https://archive.org/search?query=The%20Adventures%20of%20Prince%20Achmed",embed:null,colors:["#4b2c48","#120f1b"],rights:"Verify the film version and rights for your country."}
+];
+let activeGenre="All";
+const grid=document.getElementById("grid"), search=document.getElementById("search"), count=document.getElementById("count");
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function render(){
+ const q=search.value.trim().toLowerCase();
+ const shown=movies.filter(m=>(activeGenre==="All"||m.genre===activeGenre)&&`${m.title} ${m.genre} ${m.year}`.toLowerCase().includes(q));
+ count.textContent=`${shown.length} title${shown.length===1?"":"s"}`;
+ grid.innerHTML=shown.length?shown.map(m=>`<article class="movie">
+   <div class="poster" style="background:radial-gradient(circle at 50% 25%,${m.colors[0]},${m.colors[1]} 75%)" role="img" aria-label="${esc(m.title)} poster">
+    <span class="year">${m.year}</span><span class="poster-title">${esc(m.title)}</span>
+   </div>
+   <h3 title="${esc(m.title)}">${esc(m.title)}</h3><div class="meta">${m.year} · ${m.genre}</div>
+   <div class="movie-actions"><button class="tiny" data-watch="${esc(m.title)}">▶ Watch info</button><a class="tiny" href="${m.source}" target="_blank" rel="noopener noreferrer">Source ↗</a></div>
+  </article>`).join(""):`<div class="empty">No movies match your search. Try another title or genre.</div>`;
+ grid.querySelectorAll("[data-watch]").forEach(b=>b.addEventListener("click",()=>openMovie(movies.find(m=>m.title===b.dataset.watch))));
+}
+function openMovie(m){
+ document.getElementById("modalTitle").textContent=m.title;
+ document.getElementById("player").innerHTML=m.embed?`<iframe src="${m.embed}" title="Player for ${esc(m.title)}" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="no-referrer"></iframe>`:`<div style="height:100%;display:grid;place-items:center;color:#ddd;padding:24px;text-align:center">This title needs a verified playback link.<br><a style="color:white;margin-top:12px" href="${m.source}" target="_blank" rel="noopener noreferrer">Open the source collection ↗</a></div>`;
+ document.getElementById("modalInfo").innerHTML=`<p>${esc(m.desc)}</p><p><strong>Viewing note:</strong> ${esc(m.rights)}</p><p><a href="${m.source}" target="_blank" rel="noopener noreferrer">Visit original source ↗</a></p>`;
+ document.getElementById("playerDialog").showModal();
+}
+document.getElementById("closeDialog").addEventListener("click",()=>document.getElementById("playerDialog").close());
+document.getElementById("playerDialog").addEventListener("close",()=>document.getElementById("player").innerHTML="");
+search.addEventListener("input",render);
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{activeGenre=b.dataset.genre;document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",c===b));render()}));
+render();
+</script>
+</body>
+</html>
